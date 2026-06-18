@@ -1,0 +1,8 @@
+pandas
+numpy
+matplotlib
+seaborn
+jupyter
+requests
+beautifulsoup4
+scikit-learn
