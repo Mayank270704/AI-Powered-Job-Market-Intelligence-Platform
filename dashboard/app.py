@@ -1,321 +1,344 @@
 import streamlit as st
-import pandas as pd
-from pathlib import Path
 
 # =====================================================
 # PAGE CONFIG
 # =====================================================
+
 st.set_page_config(
-    page_title="AI Job Market Intelligence Dashboard",
-    page_icon="📊",
+    page_title="AI Job Market Intelligence",
+    page_icon="🚀",
     layout="wide"
 )
 
-st.title("📊 AI Job Market Intelligence Dashboard")
-st.markdown("---")
+# =====================================================
+# CUSTOM CSS
+# =====================================================
+
+st.markdown("""
+<style>
+
+#MainMenu{
+visibility:hidden;
+}
+
+footer{
+visibility:hidden;
+}
+
+header{
+visibility:hidden;
+}
+
+.stApp{
+    background:
+    radial-gradient(circle at top left,#172554 0%,#0f172a 40%),
+    radial-gradient(circle at top right,#312e81 0%,transparent 30%),
+    #020617;
+    color:white;
+}
+
+.block-container{
+    max-width:1400px;
+    padding-top:2rem;
+}
+
+/* HERO */
+
+.hero{
+    text-align:center;
+    padding-top:30px;
+    padding-bottom:30px;
+}
+
+.hero-title{
+    font-size:5rem;
+    font-weight:900;
+    line-height:1;
+    background:linear-gradient(
+        90deg,
+        #38bdf8,
+        #818cf8,
+        #ec4899
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero-subtitle{
+    font-size:1.3rem;
+    color:#cbd5e1;
+    margin-top:15px;
+}
+
+/* KPI CARDS */
+
+.metric-card{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:25px;
+    padding:25px;
+    text-align:center;
+    backdrop-filter:blur(15px);
+    transition:0.3s;
+    color:white;
+}
+
+.metric-card:hover{
+    transform:translateY(-8px);
+    border:1px solid #60a5fa;
+    box-shadow:0px 0px 30px rgba(96,165,250,.35);
+}
+
+.metric-number{
+    font-size:2.8rem;
+    font-weight:800;
+    color:white;
+}
+
+.metric-label{
+    color:#cbd5e1;
+    font-size:1rem;
+}
+
+/* SECTION TITLE */
+
+.section-title{
+    font-size:2.4rem;
+    font-weight:800;
+    color:white;
+    margin-top:50px;
+    margin-bottom:25px;
+}
+
+/* MODULE CARDS */
+
+.module-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.10);
+    border-radius:25px;
+    padding:30px;
+    text-align:center;
+    min-height:220px;
+    backdrop-filter:blur(15px);
+    transition:0.3s;
+}
+
+.module-card:hover{
+    transform:translateY(-10px);
+    border:1px solid #38bdf8;
+    box-shadow:0px 0px 35px rgba(56,189,248,.25);
+}
+
+.module-card h2{
+    color:white;
+    font-size:2rem;
+}
+
+.module-card p{
+    color:#cbd5e1;
+    font-size:1.05rem;
+}
+
+/* NAVIGATION BOX */
+
+.nav-box{
+    background:rgba(56,189,248,.08);
+    border:1px solid rgba(56,189,248,.15);
+    border-radius:20px;
+    padding:25px;
+    color:white;
+}
+
+.nav-box li{
+    margin-bottom:10px;
+    color:#cbd5e1;
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+    color:#94a3b8;
+    margin-top:60px;
+    padding-bottom:20px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # =====================================================
-# LOAD DATA
+# HERO
 # =====================================================
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-jobs = pd.read_csv(
-    BASE_DIR / "data" / "raw" / "job_postings.csv"
-)
+st.markdown("""
+<div class="hero">
 
-companies = pd.read_csv(
-    BASE_DIR / "data" / "raw" / "companies.csv"
-)
+<div class="hero-title">
+🚀 AI Job Market Intelligence
+</div>
 
-skills = pd.read_csv(
-    BASE_DIR / "data" / "raw" / "job_skills.csv"
-)
+<div class="hero-subtitle">
+Discover hiring trends, AI opportunities, salary benchmarks,
+skill demand and company insights using real-world job market data.
+</div>
 
-# =====================================================
-# SIDEBAR FILTERS
-# =====================================================
-st.sidebar.header("🔍 Dashboard Filters")
-
-selected_location = st.sidebar.selectbox(
-    "Select Location",
-    ["All"] + sorted(
-        jobs["location"].dropna().unique().tolist()
-    )
-)
-
-if selected_location != "All":
-    jobs = jobs[
-        jobs["location"] == selected_location
-    ]
+</div>
+""", unsafe_allow_html=True)
 
 # =====================================================
-# KPI METRICS
+# KPI SECTION
 # =====================================================
-col1, col2, col3, col4 = st.columns(4)
 
-with col1:
-    st.metric(
-        "Total Jobs",
-        f"{len(jobs):,}"
-    )
+c1,c2,c3,c4 = st.columns(4)
 
-with col2:
-    st.metric(
-        "Total Companies",
-        f"{companies['company_id'].nunique():,}"
-    )
+with c1:
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-number">15,886</div>
+        <div class="metric-label">Total Jobs</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-with col3:
-    remote_percent = round(
-        jobs["remote_allowed"]
-        .fillna(0)
-        .mean() * 100,
-        2
-    )
+with c2:
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-number">6,063</div>
+        <div class="metric-label">Companies</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.metric(
-        "Remote Jobs %",
-        f"{remote_percent}%"
-    )
+with c3:
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-number">3,010</div>
+        <div class="metric-label">Locations</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-with col4:
-    st.metric(
-        "Locations",
-        jobs["location"].nunique()
-    )
-
-st.markdown("---")
-
-# =====================================================
-# TOP HIRING LOCATIONS
-# =====================================================
-st.subheader("📍 Top Hiring Locations")
-
-location_counts = (
-    jobs["location"]
-    .value_counts()
-    .head(10)
-)
-
-st.bar_chart(location_counts)
+with c4:
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-number">270+</div>
+        <div class="metric-label">AI Openings</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # =====================================================
-# WORK TYPE DISTRIBUTION
+# QUICK ACCESS
 # =====================================================
-st.subheader("💼 Work Type Distribution")
 
-work_type = (
-    jobs["formatted_work_type"]
-    .value_counts()
-)
+st.markdown("""
+<div class="section-title">
+⚡ Explore Intelligence Modules
+</div>
+""", unsafe_allow_html=True)
 
-st.bar_chart(work_type)
+row1 = st.columns(3)
 
-# =====================================================
-# TOP HIRING COMPANIES
-# =====================================================
-st.subheader("🏢 Top Hiring Companies")
+with row1[0]:
+    st.markdown("""
+    <div class="module-card">
+    <h2>📈 Job Trends</h2>
+    <p>
+    Analyze hiring patterns, work types,
+    remote opportunities and location demand.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-merged = jobs.merge(
-    companies[["company_id", "name"]],
-    on="company_id",
-    how="left"
-)
+with row1[1]:
+    st.markdown("""
+    <div class="module-card">
+    <h2>💰 Salary Insights</h2>
+    <p>
+    Discover compensation trends,
+    salary benchmarks and top-paying roles.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-company_counts = (
-    merged["name"]
-    .value_counts()
-    .head(10)
-)
+with row1[2]:
+    st.markdown("""
+    <div class="module-card">
+    <h2>🤖 AI Jobs</h2>
+    <p>
+    Explore AI hiring demand,
+    recruiter activity and emerging roles.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.bar_chart(company_counts)
+row2 = st.columns(3)
 
-# =====================================================
-# REMOTE VS ONSITE
-# =====================================================
-st.subheader("🏠 Remote vs On-Site Jobs")
+with row2[0]:
+    st.markdown("""
+    <div class="module-card">
+    <h2>🏢 Companies</h2>
+    <p>
+    Discover top recruiters,
+    hiring concentration and market leaders.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-remote_data = (
-    jobs["remote_allowed"]
-    .fillna(0)
-    .replace({
-        0: "On-Site",
-        1: "Remote"
-    })
-    .value_counts()
-)
+with row2[1]:
+    st.markdown("""
+    <div class="module-card">
+    <h2>🧠 Skills</h2>
+    <p>
+    Track the most demanded skills
+    across thousands of job postings.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.bar_chart(remote_data)
-
-# =====================================================
-# AI / ANALYTICS JOBS
-# =====================================================
-st.subheader("🤖 AI & Analytics Jobs")
-
-ai_jobs = jobs[
-    jobs["title"].str.contains(
-        "Data Scientist|Data Analyst|Business Analyst|Machine Learning|Data Engineer|AI Engineer",
-        case=False,
-        na=False
-    )
-]
-
-st.metric(
-    "AI / Analytics Openings",
-    f"{len(ai_jobs):,}"
-)
-
-# =====================================================
-# TOP AI JOB LOCATIONS
-# =====================================================
-st.subheader("🌎 Top AI Hiring Locations")
-
-ai_locations = (
-    ai_jobs["location"]
-    .value_counts()
-    .head(10)
-)
-
-st.bar_chart(ai_locations)
-
-# =====================================================
-# TOP AI JOB TITLES
-# =====================================================
-st.subheader("🧠 Most Common AI Job Titles")
-
-ai_titles = (
-    ai_jobs["title"]
-    .value_counts()
-    .head(10)
-)
-
-st.bar_chart(ai_titles)
+with row2[2]:
+    st.markdown("""
+    <div class="module-card">
+    <h2>🚀 Career Growth</h2>
+    <p>
+    Use market intelligence to make
+    smarter career decisions.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # =====================================================
-# TOP AI HIRING COMPANIES
+# NAVIGATION
 # =====================================================
-st.subheader("🏆 Top AI Hiring Companies")
 
-ai_merged = ai_jobs.merge(
-    companies[["company_id", "name"]],
-    on="company_id",
-    how="left"
-)
+st.markdown("""
+<div class="section-title">
+📚 Dashboard Navigation
+</div>
+""", unsafe_allow_html=True)
 
-ai_company_counts = (
-    ai_merged["name"]
-    .value_counts()
-    .head(10)
-)
+st.markdown("""
+<div class="nav-box">
 
-st.bar_chart(ai_company_counts)
+<h3>👈 Use the sidebar to explore:</h3>
 
-# =====================================================
-# AI JOBS VS OTHER JOBS
-# =====================================================
-st.subheader("📊 AI Jobs vs Other Jobs")
+<ul>
+<li>📈 Job Trends</li>
+<li>💰 Salary Insights</li>
+<li>🤖 AI Jobs Intelligence</li>
+<li>🏢 Company Analysis</li>
+<li>🧠 Skills Intelligence</li>
+</ul>
 
-comparison = pd.Series({
-    "AI Jobs": len(ai_jobs),
-    "Other Jobs": len(jobs) - len(ai_jobs)
-})
-
-st.bar_chart(comparison)
+</div>
+""", unsafe_allow_html=True)
 
 # =====================================================
-# SALARY ANALYSIS
+# FOOTER
 # =====================================================
-st.subheader("💰 Salary Analysis")
 
-salary_data = jobs["max_salary"].dropna()
+st.markdown("""
+<div class="footer">
 
-if len(salary_data) > 0:
+<h4>Built by Mayank Swaroop Nandan</h4>
 
-    col1, col2, col3 = st.columns(3)
+AI Engineering • Data Analytics • Machine Learning
 
-    with col1:
-        st.metric(
-            "Average Salary",
-            f"${salary_data.mean():,.0f}"
-        )
-
-    with col2:
-        st.metric(
-            "Highest Salary",
-            f"${salary_data.max():,.0f}"
-        )
-
-    with col3:
-        st.metric(
-            "Lowest Salary",
-            f"${salary_data.min():,.0f}"
-        )
-
-else:
-    st.warning("No salary information available.")
-
-# =====================================================
-# TOP SKILLS DEMAND
-# =====================================================
-st.subheader("🧠 Top Skills Categories")
-
-skill_counts = (
-    skills["skill_abr"]
-    .value_counts()
-    .head(15)
-)
-
-st.bar_chart(skill_counts)
-
-# =====================================================
-# JOB TITLE SEARCH
-# =====================================================
-st.subheader("🔎 Search Jobs")
-
-search_term = st.text_input(
-    "Enter Job Title"
-)
-
-if search_term:
-
-    filtered_jobs = jobs[
-        jobs["title"].str.contains(
-            search_term,
-            case=False,
-            na=False
-        )
-    ]
-
-    st.write(
-        f"Found {len(filtered_jobs)} matching jobs"
-    )
-
-    st.dataframe(
-        filtered_jobs[
-            [
-                "title",
-                "location",
-                "formatted_work_type"
-            ]
-        ].head(50),
-        use_container_width=True
-    )
-
-# =====================================================
-# DATA PREVIEW
-# =====================================================
-st.subheader("📄 Sample Job Records")
-
-st.dataframe(
-    jobs[
-        [
-            "title",
-            "location",
-            "formatted_work_type"
-        ]
-    ].head(20),
-    use_container_width=True
-)
-
-st.markdown("---")
-st.success("Dashboard Loaded Successfully ✅")
+</div>
+""", unsafe_allow_html=True)
