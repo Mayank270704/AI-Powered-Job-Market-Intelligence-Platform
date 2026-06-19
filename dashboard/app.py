@@ -27,6 +27,10 @@ companies = pd.read_csv(
     BASE_DIR / "data" / "raw" / "companies.csv"
 )
 
+skills = pd.read_csv(
+    BASE_DIR / "data" / "raw" / "job_skills.csv"
+)
+
 # =====================================================
 # SIDEBAR FILTERS
 # =====================================================
@@ -188,6 +192,37 @@ ai_titles = (
 st.bar_chart(ai_titles)
 
 # =====================================================
+# TOP AI HIRING COMPANIES
+# =====================================================
+st.subheader("🏆 Top AI Hiring Companies")
+
+ai_merged = ai_jobs.merge(
+    companies[["company_id", "name"]],
+    on="company_id",
+    how="left"
+)
+
+ai_company_counts = (
+    ai_merged["name"]
+    .value_counts()
+    .head(10)
+)
+
+st.bar_chart(ai_company_counts)
+
+# =====================================================
+# AI JOBS VS OTHER JOBS
+# =====================================================
+st.subheader("📊 AI Jobs vs Other Jobs")
+
+comparison = pd.Series({
+    "AI Jobs": len(ai_jobs),
+    "Other Jobs": len(jobs) - len(ai_jobs)
+})
+
+st.bar_chart(comparison)
+
+# =====================================================
 # SALARY ANALYSIS
 # =====================================================
 st.subheader("💰 Salary Analysis")
@@ -220,6 +255,19 @@ else:
     st.warning("No salary information available.")
 
 # =====================================================
+# TOP SKILLS DEMAND
+# =====================================================
+st.subheader("🧠 Top Skills Categories")
+
+skill_counts = (
+    skills["skill_abr"]
+    .value_counts()
+    .head(15)
+)
+
+st.bar_chart(skill_counts)
+
+# =====================================================
 # JOB TITLE SEARCH
 # =====================================================
 st.subheader("🔎 Search Jobs")
@@ -249,7 +297,8 @@ if search_term:
                 "location",
                 "formatted_work_type"
             ]
-        ].head(50)
+        ].head(50),
+        use_container_width=True
     )
 
 # =====================================================
