@@ -1,14 +1,170 @@
-body {
+/* =========================
+   GLOBAL THEME
+========================= */
+
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+header {
+    visibility: hidden;
+}
+
+.stApp {
+    background:
+        radial-gradient(circle at top left,#172554 0%,#0f172a 40%),
+        radial-gradient(circle at top right,#312e81 0%,transparent 30%),
+        #020617;
+    color: white;
+}
+
+.block-container {
+    max-width: 1400px;
+    padding-top: 2rem;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+[data-testid="stSidebar"] {
+    background: #0b1120 !important;
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+[data-testid="stSidebarNav"] {
+    padding-top: 20px;
+}
+
+[data-testid="stSidebarNav"]::before {
+    content: "🚀 AI JOB MARKET";
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 25px;
+    padding-left: 12px;
+}
+
+[data-testid="stSidebarNav"] a {
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+[data-testid="stSidebarNav"] a:hover {
+    background: rgba(56,189,248,.15);
+    border-left: 4px solid #38bdf8;
+}
+
+/* =========================
+   METRIC CARDS
+========================= */
+
+[data-testid="metric-container"] {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 22px;
+    padding: 25px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+}
+
+[data-testid="metric-container"] label {
+    color: #e2e8f0 !important;
+}
+
+[data-testid="metric-container"] div {
+    color: white !important;
+}
+
+/* =========================
+   INPUT BOXES
+========================= */
+
+.stTextInput input {
+    background-color: #1e293b !important;
+    color: white !important;
+    border-radius: 12px !important;
+    border: 1px solid #334155 !important;
+}
+
+.stSelectbox div[data-baseweb="select"] {
+    background-color: #1e293b !important;
+}
+
+/* =========================
+   DATAFRAMES
+========================= */
+
+[data-testid="stDataFrame"] {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* =========================
+   PLOTLY FIX
+========================= */
+
+.js-plotly-plot,
+.plotly,
+.plot-container {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+svg.main-svg {
+    background: transparent !important;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+
+h1 {
+    color: white !important;
+}
+
+h2 {
+    color: white !important;
+}
+
+h3 {
+    color: white !important;
+}
+
+/* =========================
+   SUCCESS BOX
+========================= */
+
+[data-testid="stAlert"] {
+    border-radius: 18px;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
     background: #0f172a;
 }
 
-.hero {
-    text-align: center;
-    padding: 60px;
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 20px;
 }
 
-.glass-card {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
 }

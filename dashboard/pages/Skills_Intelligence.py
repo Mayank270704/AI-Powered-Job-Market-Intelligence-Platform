@@ -13,30 +13,15 @@ st.set_page_config(
     layout="wide"
 )
 
+with open("dashboard/assets/style.css") as f:
+    st.markdown(
+        f"<style>{f.read()}</style>",
+        unsafe_allow_html=True
+    )
+
 # =====================================================
 # CUSTOM CSS
 # =====================================================
-
-st.markdown("""
-<style>
-
-.main {
-    background-color: #0f172a;
-}
-
-h1,h2,h3 {
-    color:white;
-}
-
-[data-testid="metric-container"] {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 20px;
-    border-radius: 20px;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 # =====================================================
 # LOAD DATA
@@ -49,49 +34,10 @@ skills = pd.read_csv(
 )
 
 # =====================================================
-# HERO SECTION
+# DATA PREP
 # =====================================================
 
-st.markdown("""
-# 🧠 Skills Intelligence
-
-Analyze the most demanded skills,
-technology trends,
-and market requirements.
-
----
-""")
-
-# =====================================================
-# KPI CARDS
-# =====================================================
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.metric(
-        "📚 Total Skill Records",
-        f"{len(skills):,}"
-    )
-
-with col2:
-    st.metric(
-        "🏷 Unique Skills",
-        skills["skill_abr"].nunique()
-    )
-
-with col3:
-    top_skill = skills["skill_abr"].mode()[0]
-    st.metric(
-        "🔥 Most Demanded Skill",
-        top_skill
-    )
-
-st.markdown("---")
-
-# =====================================================
-# TOP SKILLS
-# =====================================================
+top_skill = skills["skill_abr"].mode()[0]
 
 skill_counts = (
     skills["skill_abr"]
@@ -105,83 +51,60 @@ skill_counts.columns = [
     "Count"
 ]
 
-fig_skills = px.bar(
-    skill_counts,
-    x="Skill",
-    y="Count",
-    title="🔥 Top 15 Most In-Demand Skills",
-    template="plotly_dark"
-)
-
-fig_skills.update_layout(
-    height=550
-)
-
-st.plotly_chart(
-    fig_skills,
-    use_container_width=True
-)
-
 # =====================================================
-# TOP 10 SKILLS PIE CHART
+# HERO
 # =====================================================
 
-top10 = (
-    skills["skill_abr"]
-    .value_counts()
-    .head(10)
-    .reset_index()
-)
+st.markdown("""
+<div class="hero-title">
+🧠 Skills Intelligence Hub
+</div>
 
-top10.columns = [
-    "Skill",
-    "Count"
-]
+<div class="hero-sub">
+Analyze the most demanded skills,
+technology trends and hiring requirements.
+</div>
+""", unsafe_allow_html=True)
 
-fig_pie = px.pie(
-    top10,
-    names="Skill",
-    values="Count",
-    hole=0.45,
-    title="📊 Skill Demand Share",
-    template="plotly_dark"
-)
-
-st.plotly_chart(
-    fig_pie,
-    use_container_width=True
-)
+st.markdown("---")
 
 # =====================================================
-# DEMAND RANKING
+# KPI CARDS
 # =====================================================
 
-st.subheader("🏆 Top Skills Ranking")
+c1, c2, c3 = st.columns(3)
 
-ranking_df = (
-    skills["skill_abr"]
-    .value_counts()
-    .head(20)
-    .reset_index()
-)
+with c1:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h2>{len(skills):,}</h2>
+        <p>Total Skill Records</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-ranking_df.columns = [
-    "Skill",
-    "Demand Count"
-]
+with c2:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h2>{skills['skill_abr'].nunique():,}</h2>
+        <p>Unique Skills</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-ranking_df.index = ranking_df.index + 1
+with c3:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h2>{top_skill}</h2>
+        <p>Top Skill</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.dataframe(
-    ranking_df,
-    use_container_width=True
-)
+st.markdown("---")
 
 # =====================================================
 # SEARCH SKILL
 # =====================================================
 
-st.subheader("🔍 Search Skill Demand")
+st.subheader("🔍 Skill Search")
 
 search_skill = st.text_input(
     "Enter Skill Name"
@@ -209,10 +132,86 @@ if search_skill:
     )
 
 # =====================================================
-# INSIGHTS
+# TOP SKILLS CHART
 # =====================================================
 
-st.markdown("---")
+fig_skills = px.bar(
+    skill_counts,
+    x="Skill",
+    y="Count",
+    color="Count",
+    color_continuous_scale="plasma",
+    template="plotly_dark",
+    title="🔥 Top 15 Most In-Demand Skills"
+)
+
+fig_skills.update_layout(
+    height=550
+)
+
+st.plotly_chart(
+    fig_skills,
+    use_container_width=True
+)
+
+# =====================================================
+# SKILL SHARE
+# =====================================================
+
+top10 = (
+    skills["skill_abr"]
+    .value_counts()
+    .head(10)
+    .reset_index()
+)
+
+top10.columns = [
+    "Skill",
+    "Count"
+]
+
+fig_pie = px.pie(
+    top10,
+    names="Skill",
+    values="Count",
+    hole=0.55,
+    template="plotly_dark",
+    title="📊 Skill Demand Share"
+)
+
+st.plotly_chart(
+    fig_pie,
+    use_container_width=True
+)
+
+# =====================================================
+# SKILL RANKING
+# =====================================================
+
+st.subheader("🏆 Top Skills Ranking")
+
+ranking_df = (
+    skills["skill_abr"]
+    .value_counts()
+    .head(20)
+    .reset_index()
+)
+
+ranking_df.columns = [
+    "Skill",
+    "Demand Count"
+]
+
+ranking_df.index += 1
+
+st.dataframe(
+    ranking_df,
+    use_container_width=True
+)
+
+# =====================================================
+# INSIGHTS
+# =====================================================
 
 top_skill_name = skill_counts.iloc[0]["Skill"]
 top_skill_count = skill_counts.iloc[0]["Count"]

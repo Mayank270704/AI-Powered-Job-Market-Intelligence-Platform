@@ -13,30 +13,15 @@ st.set_page_config(
     layout="wide"
 )
 
+with open("dashboard/assets/style.css") as f:
+    st.markdown(
+        f"<style>{f.read()}</style>",
+        unsafe_allow_html=True
+    )
+
 # =====================================================
 # CUSTOM CSS
 # =====================================================
-
-st.markdown("""
-<style>
-
-.main {
-    background-color: #0f172a;
-}
-
-h1,h2,h3 {
-    color:white;
-}
-
-[data-testid="metric-container"] {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 20px;
-    border-radius: 20px;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 # =====================================================
 # LOAD DATA
