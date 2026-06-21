@@ -246,4 +246,4 @@ Built by <b>Mayank Swaroop Nandan</b>
 AI Engineering • Data Analytics • Machine Learning
 
 </div>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True
