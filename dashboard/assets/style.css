@@ -15,11 +15,63 @@ header {
 }
 
 .stApp {
+
     background:
-        radial-gradient(circle at top left,#172554 0%,#0f172a 40%),
-        radial-gradient(circle at top right,#312e81 0%,transparent 30%),
-        #020617;
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255,0,60,.15),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(255,0,80,.12),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 50% 90%,
+            rgba(255,0,60,.12),
+            transparent 30%
+        ),
+
+        #050505;
+
     color: white;
+
+}
+
+.stApp::before {
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,0,60,.08) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,0,60,.08) 1px,
+            transparent 1px
+        );
+
+    background-size:80px 80px;
+
+    transform:
+        perspective(1000px)
+        rotateX(70deg)
+        scale(2);
+
+    transform-origin:bottom;
+
+    z-index:-1;
+
+    pointer-events:none;
 }
 
 .block-container {
@@ -36,12 +88,18 @@ header {
     border-right: 1px solid rgba(255,255,255,0.08);
 }
 
+/* FIXED SIDEBAR TEXT */
+
+[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
 [data-testid="stSidebarNav"] {
     padding-top: 20px;
 }
 
 [data-testid="stSidebarNav"]::before {
-    content: "🚀 AI JOB MARKET";
+    content: "AI JOB MARKET";
     display: block;
     font-size: 24px;
     font-weight: 800;
@@ -51,16 +109,35 @@ header {
 }
 
 [data-testid="stSidebarNav"] a {
-    background: rgba(255,255,255,0.04);
-    border-radius: 12px;
-    margin-bottom: 8px;
-    padding: 10px;
-    transition: 0.3s;
+    background: rgba(255,255,255,0.08);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    padding: 12px;
+    transition: all 0.3s ease;
+    color: white !important;
+    font-weight: 600;
+}
+
+[data-testid="stSidebarNav"] span {
+    color: white !important;
+    opacity: 1 !important;
+    font-weight: 600;
 }
 
 [data-testid="stSidebarNav"] a:hover {
-    background: rgba(56,189,248,.15);
-    border-left: 4px solid #38bdf8;
+    background: rgba(239,68,68,.25);
+    border-left: 4px solid #ef4444;
+    box-shadow: 0 0 15px rgba(239,68,68,.35);
+    transform: translateX(4px);
+}
+
+[data-testid="stSidebarNav"] a[aria-current="page"] {
+    background: linear-gradient(
+        90deg,
+        rgba(239,68,68,.25),
+        rgba(220,38,38,.25)
+    );
+    border-left: 4px solid #ef4444;
 }
 
 /* =========================
@@ -68,12 +145,27 @@ header {
 ========================= */
 
 [data-testid="metric-container"] {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.04);
+
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(239,68,68,0.15);
+
     border-radius: 22px;
-    padding: 25px;
-    text-align: center;
-    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.4);
+
+    transition: all .3s ease;
+}
+
+[data-testid="metric-container"]:hover {
+    transform: translateY(-6px);
+
+    border: 1px solid #ef4444;
+
+    box-shadow:
+        0 0 25px rgba(239,68,68,.35);
 }
 
 [data-testid="metric-container"] label {
@@ -95,6 +187,10 @@ header {
     border: 1px solid #334155 !important;
 }
 
+.stTextInput label {
+    color: white !important;
+}
+
 .stSelectbox div[data-baseweb="select"] {
     background-color: #1e293b !important;
 }
@@ -110,7 +206,7 @@ header {
 }
 
 /* =========================
-   PLOTLY FIX
+   PLOTLY
 ========================= */
 
 .js-plotly-plot,
@@ -128,15 +224,15 @@ svg.main-svg {
    HEADINGS
 ========================= */
 
-h1 {
-    color: white !important;
-}
-
-h2 {
-    color: white !important;
-}
-
-h3 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label,
+span {
     color: white !important;
 }
 
@@ -167,4 +263,22 @@ h3 {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #475569;
+}
+
+@keyframes pulseGlow {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.08);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+.hero-title {
+    animation: pulseGlow 4s infinite;
 }

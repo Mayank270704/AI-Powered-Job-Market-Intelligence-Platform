@@ -55,7 +55,12 @@ st.markdown("""
 font-size:72px;
 font-weight:900;
 margin-bottom:10px;
-background:linear-gradient(90deg,#38bdf8,#818cf8,#ec4899);
+background:linear-gradient(
+90deg,
+#ef4444,
+#dc2626,
+#f87171
+);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 '>
@@ -246,4 +251,4 @@ Built by <b>Mayank Swaroop Nandan</b>
 AI Engineering • Data Analytics • Machine Learning
 
 </div>
-""", unsafe_allow_html=True
+""", unsafe_allow_html=True)
